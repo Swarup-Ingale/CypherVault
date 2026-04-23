@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CypherVault | Auth Matrix</title>
+    <link rel="stylesheet" href="../../css/main.css">
+</head>
+<body class="landing-body">
+
+    <div class="bg-glow"></div>
+    <div class="decorative-corner corner-top-left"></div>
+    <div class="decorative-corner corner-top-right"></div>
+    <div class="decorative-corner corner-bottom-left"></div>
+    <div class="decorative-corner corner-bottom-right"></div>
+
+    <header class="landing-header fade-in-up">
+        <div style="display: flex; gap: 20px;">
+            <span style="color: var(--accent-green); font-family: var(--font-mono);">v2.6</span>
+            <span style="color: var(--text-muted); font-family: var(--font-mono); cursor: pointer;" onclick="window.location.href='../../../index.html'">[ RETURN TO ROOT ]</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <span class="status-indicator active"></span>
+            <span class="system-secure-text">AWAITING AUTH</span>
+        </div>
+    </header>
+
+    <main class="initialize-module">
+        <div class="split-layout">
+            
+            <div class="hero-box fade-in-up delay-1" style="align-items: stretch; text-align: left;">
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <img src="../../../public/assets/images/logo.svg" alt="Logo" class="logo-pulse" style="width: 60px; height: 60px; margin-bottom: 15px;">
+                    <h2 style="margin: 0; color: var(--accent-green); font-family: var(--font-mono); letter-spacing: 1px;">IDENTITY PROTOCOL</h2>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 20px;">
+                    <div>
+                        <div class="data-label">OPERATOR ID (USERNAME)</div>
+                        <input type="text" id="username" style="width: 100%; padding: 12px; background: rgba(0,0,0,0.5); border: 1px solid var(--border-subtle); color: var(--text-primary); font-family: var(--font-mono); border-radius: 4px; box-sizing: border-box; outline: none;">
+                    </div>
+                    <div>
+                        <div class="data-label">PASSPHRASE</div>
+                        <input type="password" id="password" style="width: 100%; padding: 12px; background: rgba(0,0,0,0.5); border: 1px solid var(--border-subtle); color: var(--text-primary); font-family: var(--font-mono); border-radius: 4px; box-sizing: border-box; outline: none;">
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 15px; margin-top: 30px;">
+                    <button class="btn-cyber active-glow" id="secure-login" style="flex: 1;">SECURE AUTH</button>
+                    <button class="btn-cyber danger" id="exploit-login" style="flex: 1;">EXPLOIT AUTH</button>
+                </div>
+            </div>
+
+            <div class="terminal-box fade-in-up delay-2">
+                <div class="terminal-header">
+                    <div class="window-controls">
+                        <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                    </div>
+                    <div class="terminal-title">auth_debugger.log</div>
+                </div>
+                
+                <div class="terminal-body" id="auth-debugger" style="justify-content: flex-start;">
+                    <p class="term-line">[*] Auth Matrix Initialized.</p>
+                    <p class="term-line" style="color: var(--text-muted);">Listening for credential payload...</p>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="landing-footer fade-in-up delay-3" style="font-family: var(--font-mono); color: var(--text-muted);">
+        <div>V 2.6.0.44 | NODE_ID: alpha-7 | ENCRYPTED</div>
+        <div style="opacity: 0.5;">&copy; 2026 CypherVault Systems.</div>
+    </footer>
+
+    <script src="../../js/app.js"></script> 
+</body>
+</html>

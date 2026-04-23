@@ -1,0 +1,64 @@
+import { Request, Response, NextFunction } from 'express';
+import crypto from 'crypto';
+
+export class SecurityGuards {
+    
+    // 🛡️ Custom Double-Submit Cookie CSRF Protection
+    public static csrfGuard(req: Request, res: Response, next: NextFunction): void {
+        
+        // 1. Generate the token pair if it doesn't exist for the session
+        if (!req.cookies['_csrf_secure']) {
+            // Generate a 32-byte cryptographically strong random string
+            const csrfToken = crypto.randomBytes(32).toString('hex');
+            
+            const isProd = process.env.NODE_ENV === 'production';
+            const sameSitePolicy = isProd ? 'none' : 'strict';
+
+            // The Secure Vault: HttpOnly, cannot be read by any frontend script (Mitigates XSS theft)
+            res.cookie('_csrf_secure', csrfToken, {
+                httpOnly: true,
+                secure: isProd, // Must be true in production (HTTPS)
+                sameSite: sameSitePolicy as any, // 'none' allows cross-domain cookies in cloud
+                maxAge: 3600000 // 1 hour
+            });
+
+            // The Transport: Readable by the frontend so it can attach it to headers
+            res.cookie('XSRF-TOKEN', csrfToken, {
+                secure: isProd,
+                sameSite: sameSitePolicy as any,
+                maxAge: 3600000
+            });
+        }
+
+        // 2. Validate the token on all state-changing requests
+        const isStateChanging = ['POST', 'PUT', 'DELETE', 'PATCH'].includes(req.method);
+        
+        if (isStateChanging) {
+            const cookieToken = req.cookies['_csrf_secure'];
+            // Check standard Axios/Fetch headers
+            const headerToken = req.headers['x-csrf-token'] || req.headers['x-xsrf-token'];
+
+            if (!cookieToken || !headerToken) {
+                res.status(403).json({ 
+                    error: 'Access Denied: Missing CSRF validation tokens.',
+                    mitigation: 'Ensure your client sends the X-CSRF-Token header.'
+                });
+                return;
+            }
+
+            // Cryptographic timing-safe comparison to prevent timing attacks
+            const isMatch = crypto.timingSafeEqual(
+                Buffer.from(cookieToken), 
+                Buffer.from(headerToken as string)
+            );
+
+            if (!isMatch) {
+                console.error(`[Security Alert] CSRF token mismatch detected from IP: ${req.ip}`);
+                res.status(403).json({ error: 'Access Denied: Invalid CSRF token payload.' });
+                return;
+            }
+        }
+
+        next();
+    }
+}

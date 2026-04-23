@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CypherVault | System Info</title>
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="../../css/glassmorphism.css">
+</head>
+<body>
+    <div style="max-width: 800px; margin: 60px auto; padding: 0 20px;">
+        <header style="display: flex; align-items: center; gap: 15px; margin-bottom: 40px;">
+            <img src="../../../public/assets/images/logo.svg" alt="CypherVault Logo" style="width: 50px; height: 50px;">
+            <h1 style="font-family: var(--font-mono); color: var(--accent-green);">System Architecture</h1>
+        </header>
+
+        <section class="glass-panel" style="margin-bottom: 30px;">
+            <h2 style="color: var(--text-primary); margin-bottom: 15px;">Mission Statement</h2>
+            <p style="color: var(--text-muted); line-height: 1.6;">
+                CypherVault is a full-stack engineering project designed to demonstrate dual-state web architecture. 
+                It features a meticulously crafted UI mirroring elite cybersecurity platforms, powered by a Node.js/TypeScript backend.
+            </p>
+        </section>
+
+        <section class="glass-panel" style="margin-bottom: 30px;">
+            <h2 style="color: var(--text-primary); margin-bottom: 15px;">Security Implementations</h2>
+            <ul style="color: var(--text-muted); line-height: 1.8; margin-left: 20px; font-family: var(--font-mono); font-size: 0.9rem;">
+                <li><strong style="color: var(--accent-green);">SQLi Defense:</strong> Parameterized queries via pg driver.</li>
+                <li><strong style="color: var(--accent-green);">CSRF Mitigation:</strong> Custom Double-Submit Cryptographic Cookies.</li>
+                <li><strong style="color: var(--accent-green);">SSRF Shielding:</strong> Internal IP (RFC 1918) range blocking.</li>
+                <li><strong style="color: var(--accent-green);">XXE & XSS:</strong> Context-aware sanitization and DTD disabling.</li>
+            </ul>
+        </section>
+
+        <a href="../../../index.html" style="color: var(--text-muted); text-decoration: none; font-family: var(--font-mono);">[ Return to Main Menu ]</a>
+    </div>
+</body>
+</html>

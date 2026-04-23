@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CypherVault | Dashboard</title>
+    <link rel="stylesheet" href="../../css/main.css">
+</head>
+<body class="landing-body">
+
+    <div class="bg-glow"></div>
+    <div class="decorative-corner corner-top-left"></div>
+    <div class="decorative-corner corner-top-right"></div>
+    <div class="decorative-corner corner-bottom-left"></div>
+    <div class="decorative-corner corner-bottom-right"></div>
+
+    <header class="landing-header fade-in-up">
+        <div style="display: flex; gap: 20px;">
+            <span style="color: var(--accent-green); font-family: var(--font-mono);">v2.6</span>
+            <span style="color: var(--text-muted); font-family: var(--font-mono); cursor: pointer;" onclick="window.location.href='../machines/list.html'">[ TARGET ROSTER ]</span>
+            <span style="color: var(--text-muted); font-family: var(--font-mono); cursor: pointer;" onclick="window.location.href='../profile/login.html'">[ AUTH MATRIX ]</span>
+            <span id="logout-btn" style="color: #ff4444; font-family: var(--font-mono); cursor: pointer; text-shadow: 0 0 8px rgba(255,68,68,0.4);">[ TERMINATE SESSION ]</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <span class="status-indicator active" id="connection-status-dot"></span>
+            <span class="system-secure-text" id="connection-status-text">ONLINE SECURE</span>
+        </div>
+    </header>
+
+    <main class="initialize-module">
+        <div class="split-layout">
+            
+            <div class="hero-box fade-in-up delay-1" style="align-items: stretch; text-align: left; flex: 0.8;">
+                <h2 style="margin: 0 0 25px 0; color: #fff; font-family: var(--font-mono);">Target Extraction</h2>
+                
+                <div style="margin-bottom: 30px;">
+                    <div class="data-label">TARGET MACHINE ID</div>
+                    <input type="text" id="target-id" style="width: 100%; padding: 12px; background: rgba(0,0,0,0.5); border: 1px solid var(--border-subtle); color: var(--text-primary); font-family: var(--font-mono); border-radius: 4px; box-sizing: border-box; outline: none; font-size: 1.1rem;">
+                </div>
+
+                <div style="display: flex; gap: 15px;">
+                    <button class="btn-cyber active-glow" id="execute-secure" style="flex: 1;">EXECUTE (SECURE)</button>
+                    <button class="btn-cyber danger" id="execute-vulnerable" style="flex: 1;">EXECUTE (VULN)</button>
+                </div>
+            </div>
+
+            <div class="terminal-box fade-in-up delay-2" style="flex: 1.2;">
+                <div class="terminal-header">
+                    <div class="window-controls">
+                        <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                    </div>
+                    <div class="terminal-title">intel_report.log</div>
+                </div>
+                
+                <div class="terminal-body" style="padding: 0;">
+                    <div style="padding: 20px; border-bottom: 1px solid var(--border-subtle); display: grid; grid-template-columns: 1fr 1fr; gap: 20px; background: rgba(255,255,255,0.02);">
+                        <div>
+                            <div class="data-label">HOSTNAME</div>
+                            <div class="data-value" id="intel-hostname" style="color: var(--accent-green);">---</div>
+                        </div>
+                        <div>
+                            <div class="data-label">OPERATING SYSTEM</div>
+                            <div class="data-value" id="intel-os" style="color: var(--accent-green);">---</div>
+                        </div>
+                        <div>
+                            <div class="data-label">DIFFICULTY RATING</div>
+                            <div class="data-value" id="intel-difficulty" style="color: var(--accent-green);">---</div>
+                        </div>
+                        <div>
+                            <div class="data-label">BASE POINTS</div>
+                            <div class="data-value" id="intel-points" style="color: var(--accent-green);">---</div>
+                        </div>
+                    </div>
+                    
+                    <div style="padding: 20px; flex: 1; overflow-y: auto;" id="debugger-output">
+                        <p class="term-line" style="color: var(--text-muted);">Waiting for extraction command...</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="landing-footer fade-in-up delay-3" style="font-family: var(--font-mono); color: var(--text-muted);">
+        <div>V 2.6.0.44 | NODE_ID: alpha-7 | ENCRYPTED</div>
+        <div style="opacity: 0.5;">&copy; 2026 CypherVault Systems.</div>
+    </footer>
+
+    <script src="../../js/app.js"></script> 
+</body>
+</html>

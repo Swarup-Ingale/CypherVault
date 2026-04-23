@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CypherVault | Target Roster</title>
+    <link rel="stylesheet" href="../../css/main.css">
+    <style>
+        .machine-card {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border-subtle);
+            padding: 20px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .machine-card:hover {
+            border-color: var(--accent-green);
+            box-shadow: 0 0 15px rgba(159, 239, 0, 0.2);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="landing-body">
+
+    <div class="bg-glow"></div>
+    <div class="decorative-corner corner-top-left"></div>
+    <div class="decorative-corner corner-top-right"></div>
+    <div class="decorative-corner corner-bottom-left"></div>
+    <div class="decorative-corner corner-bottom-right"></div>
+
+    <header class="landing-header fade-in-up">
+        <div style="display: flex; gap: 20px;">
+            <span style="color: var(--accent-green); font-family: var(--font-mono);">v2.6</span>
+            <span style="color: var(--text-muted); font-family: var(--font-mono); cursor: pointer;" onclick="window.location.href='../../../index.html'">[ RETURN TO ROOT ]</span>
+            <span style="color: var(--text-muted); font-family: var(--font-mono); cursor: pointer;" onclick="window.location.href='../dashboard/dashboard.html'">[ MAIN DASHBOARD ]</span>
+            <span id="logout-btn" style="color: #ff4444; font-family: var(--font-mono); cursor: pointer; text-shadow: 0 0 8px rgba(255,68,68,0.4);">[ TERMINATE SESSION ]</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <span class="status-indicator active"></span>
+            <span class="system-secure-text">NETWORK ACTIVE</span>
+        </div>
+    </header>
+
+    <main class="initialize-module">
+        <div class="split-layout">
+            
+            <div class="hero-box fade-in-up delay-1" style="align-items: stretch; text-align: left; padding: 30px; display: flex; flex-direction: column;">
+                
+                <h2 class="glitch-glow" style="margin: 0 0 20px 0; flex-shrink: 0;">TARGET ROSTER</h2>
+                
+                <div id="roster-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; overflow-y: auto; padding-right: 10px; flex: 1;">
+                    </div>
+            </div>
+
+            <div class="terminal-box fade-in-up delay-2">
+                <div class="terminal-header">
+                    <div class="window-controls">
+                        <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                    </div>
+                    <div class="terminal-title">net_discovery.log</div>
+                </div>
+                
+                <div class="terminal-body" id="roster-debugger" style="justify-content: flex-start;">
+                    </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="landing-footer fade-in-up delay-3" style="font-family: var(--font-mono); color: var(--text-muted);">
+        <div>V 2.6.0.44 | NODE_ID: alpha-7 | ENCRYPTED</div>
+        <div style="opacity: 0.5;">&copy; 2026 CypherVault Systems.</div>
+    </footer>
+
+    <script src="../../js/app.js"></script> 
+</body>
+</html>
