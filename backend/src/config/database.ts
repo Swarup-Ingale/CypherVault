@@ -3,16 +3,21 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-// Initialize the PostgreSQL Connection Pool
+// The connection pool needs to know if it's on Render (production) or your laptop (development)
+const isProduction = process.env.NODE_ENV === 'production';
+
 export const db = new Pool({
-    host: process.env.DB_HOST || 'localhost',
-    port: parseInt(process.env.DB_PORT || '5432'),
-    user: process.env.DB_USER || 'postgres',
-    password: process.env.DB_PASS || 'password',
-    database: process.env.DB_NAME || 'cyphervault_db',
+    // This tells it to strictly use the Render Environment Variable we set up
+    connectionString: process.env.DATABASE_URL,
+    
+    // Cloud databases require SSL. Local databases do not. This switches automatically.
+    ssl: isProduction ? { rejectUnauthorized: false } : false
 });
 
-// Test the connection
-db.connect()
-    .then(() => console.log('[Database] PostgreSQL Vault connected successfully.'))
-    .catch((err) => console.error('[Database] Connection critical failure:', err.message));
+db.on('connect', () => {
+    console.log('[Database] PostgreSQL Vault connected successfully');
+});
+
+db.on('error', (err) => {
+    console.error('[Database] Critical Connection Error:', err.message);
+});
