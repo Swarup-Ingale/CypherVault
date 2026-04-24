@@ -27,9 +27,11 @@ function getCSRFToken() {
 
 document.addEventListener("DOMContentLoaded", () => {
     
-    // ==========================================
-    // SECURITY PUZZLE & LOGOUT LOGIC
-    // ==========================================
+    // --- CYBERVAULT PRE-FLIGHT HANDSHAKE ---
+    // Silently ping the backend on page load to grab the CSRF security cookies
+    fetch(`${API_BASE}/secure/machines?id=1`, { credentials: 'include' }).catch(() => {});
+
+    // ... the rest of your code ...
     const currentPage = window.location.pathname.toLowerCase();
     const isProtectedPage = currentPage.includes('dashboard') || currentPage.includes('list.html');
 
