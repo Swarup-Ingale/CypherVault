@@ -2,7 +2,7 @@
 // CLOUD API ROUTING
 // ==========================================
 // When you deploy, comment out localhost and uncomment the Render URL
-const API_BASE = 'https://cyphervault-api.onrender.com/api'; // Replace with your actual Render URL later
+const API_BASE = '/api'; // Replace with your actual Render URL later
 
 // Helper Function: Write to the cinematic terminals
 function logToTerminal(terminalId, text, type = 'normal') {
