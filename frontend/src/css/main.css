@@ -267,3 +267,67 @@ body {
     color: var(--text-primary); font-family: var(--font-mono); font-size: 0.85rem;
 }
 #ai-input::placeholder { color: rgba(169, 183, 198, 0.3); }
+
+/* ========================================== */
+/* MOBILE OVERRIDE PROTOCOL (Android/iOS)     */
+/* ========================================== */
+
+@media screen and (max-width: 768px) {
+    /* Stack the layout vertically */
+    .split-layout {
+        flex-direction: column;
+        gap: 30px;
+        padding: 10px;
+    }
+
+    /* Hide the decorative side data streams to save screen space */
+    .side-terminal, 
+    .decorative-corner {
+        display: none !important;
+    }
+
+    /* Shrink the massive header text */
+    .hero-box h1 {
+        font-size: 2.2rem !important;
+    }
+
+    /* Center the hero content and buttons */
+    .hero-box {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* Stack buttons vertically on small screens */
+    .hero-box div[style*="display: flex; gap: 15px"] {
+        flex-direction: column;
+        width: 100%;
+        max-width: 300px;
+        gap: 10px !important;
+    }
+
+    .btn-cyber {
+        width: 100%;
+    }
+
+    /* Adjust the terminal box so it fits on screen */
+    .terminal-box {
+        width: 100%;
+        height: 350px;
+        margin-bottom: 80px; /* Give space for the footer */
+    }
+
+    /* Adjust headers and footers to wrap nicely */
+    .landing-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 15px;
+    }
+
+    /* Hide the developer footer on mobile to prevent overlap */
+    div[style*="position: fixed; bottom: 20px"] {
+        display: none !important;
+    }
+}

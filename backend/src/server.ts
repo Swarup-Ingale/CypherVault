@@ -77,7 +77,7 @@ app.get('/api/secure/machines', async (req, res) => {
     }
 });
 
-// B. O.R.A.C.L.E. AI SECURE PROXY
+// B. S.W.A.L.E AI SECURE PROXY
 app.post('/api/secure/oracle', async (req, res) => {
     try {
         const { query, history } = req.body;
@@ -87,7 +87,7 @@ app.post('/api/secure/oracle', async (req, res) => {
             return res.status(500).json({ reply: "[CRITICAL ERROR] AI Core offline. API Key missing." });
         }
 
-        const systemPrompt = `You are O.R.A.C.L.E., the Virtual Intelligence Core for the CypherVault platform. 
+        const systemPrompt = `You are S.W.A.L.E, the Virtual Intelligence Core for the CypherVault platform. 
         Creator: Swarup Ingale, a Cybersecurity Specialist.
         Tone: Cyberpunk, clinical, highly technical. No emojis.
         Mission: Guide the Operator through CypherVault. Explain vulnerabilities like SQLi, CSRF, XSS, and SSRF.
