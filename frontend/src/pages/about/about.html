@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CypherVault | About</title>
-    <link rel="stylesheet" href="../../css/style.css">
+    
+    <link rel="stylesheet" href="../../css/main.css"> 
+    <link rel="stylesheet" href="/src/css/glassmorphism.css"> 
+    
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         .about-container {
@@ -12,7 +15,7 @@
             margin: 100px auto;
             padding: 40px;
             background: rgba(10, 15, 20, 0.95);
-            border: 1px solid var(--accent-green);
+            border: 1px solid var(--accent-green, #00ffaa);
             box-shadow: 0 0 20px rgba(0, 255, 170, 0.1);
             position: relative;
             overflow: hidden;
@@ -22,11 +25,11 @@
             position: absolute;
             top: 0; left: 0; right: 0;
             height: 2px;
-            background: linear-gradient(90deg, transparent, var(--accent-green), transparent);
+            background: linear-gradient(90deg, transparent, var(--accent-green, #00ffaa), transparent);
         }
         .glitch-text {
             font-size: 2.5rem;
-            color: var(--accent-green);
+            color: var(--accent-green, #00ffaa);
             text-transform: uppercase;
             margin-bottom: 20px;
             text-shadow: 0 0 10px rgba(0, 255, 170, 0.5);
@@ -46,15 +49,16 @@
             padding: 8px 15px;
             background: rgba(0, 255, 170, 0.05);
             border: 1px solid rgba(0, 255, 170, 0.3);
-            color: var(--accent-green);
+            color: var(--accent-green, #00ffaa);
             font-size: 0.9rem;
         }
     </style>
 </head>
-<body>
-    <div class="top-nav">
-        <div class="nav-brand">v2.6 <span style="color: #666; margin-left: 15px;">[ ABOUT PROTOCOL ]</span></div>
-        <a href="../../../index.html" class="nav-link" style="color: var(--accent-green); text-decoration: none; border: 1px solid var(--accent-green); padding: 5px 15px;">RETURN TO ROOT</a>
+
+<body style="background-color: #05080c; color: #fff; font-family: 'JetBrains Mono', monospace; margin: 0;">
+    <div style="padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1a232c;">
+        <div style="font-weight: bold;">v2.6 <span style="color: #666; margin-left: 15px;">[ ABOUT PROTOCOL ]</span></div>
+        <a href="../../../index.html" style="color: var(--accent-green, #00ffaa); text-decoration: none; border: 1px solid var(--accent-green, #00ffaa); padding: 5px 15px; transition: all 0.3s ease;">RETURN TO ROOT</a>
     </div>
 
     <div class="about-container fade-in-up">
