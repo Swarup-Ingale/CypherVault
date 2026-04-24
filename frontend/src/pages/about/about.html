@@ -3,36 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CypherVault | System Info</title>
-    <link rel="stylesheet" href="../../css/main.css">
-    <link rel="stylesheet" href="../../css/glassmorphism.css">
+    <title>CypherVault | About</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .about-container {
+            max-width: 800px;
+            margin: 100px auto;
+            padding: 40px;
+            background: rgba(10, 15, 20, 0.95);
+            border: 1px solid var(--accent-green);
+            box-shadow: 0 0 20px rgba(0, 255, 170, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        .about-container::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-green), transparent);
+        }
+        .glitch-text {
+            font-size: 2.5rem;
+            color: var(--accent-green);
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(0, 255, 170, 0.5);
+        }
+        .mission-text {
+            color: #a9b7c6;
+            line-height: 1.8;
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+        .tech-stack {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .tech-badge {
+            padding: 8px 15px;
+            background: rgba(0, 255, 170, 0.05);
+            border: 1px solid rgba(0, 255, 170, 0.3);
+            color: var(--accent-green);
+            font-size: 0.9rem;
+        }
+    </style>
 </head>
 <body>
-    <div style="max-width: 800px; margin: 60px auto; padding: 0 20px;">
-        <header style="display: flex; align-items: center; gap: 15px; margin-bottom: 40px;">
-            <img src="../../../public/assets/images/logo.svg" alt="CypherVault Logo" style="width: 50px; height: 50px;">
-            <h1 style="font-family: var(--font-mono); color: var(--accent-green);">System Architecture</h1>
-        </header>
+    <div class="top-nav">
+        <div class="nav-brand">v2.6 <span style="color: #666; margin-left: 15px;">[ ABOUT PROTOCOL ]</span></div>
+        <a href="../../../index.html" class="nav-link" style="color: var(--accent-green); text-decoration: none; border: 1px solid var(--accent-green); padding: 5px 15px;">RETURN TO ROOT</a>
+    </div>
 
-        <section class="glass-panel" style="margin-bottom: 30px;">
-            <h2 style="color: var(--text-primary); margin-bottom: 15px;">Mission Statement</h2>
-            <p style="color: var(--text-muted); line-height: 1.6;">
-                CypherVault is a full-stack engineering project designed to demonstrate dual-state web architecture. 
-                It features a meticulously crafted UI mirroring elite cybersecurity platforms, powered by a Node.js/TypeScript backend.
-            </p>
-        </section>
-
-        <section class="glass-panel" style="margin-bottom: 30px;">
-            <h2 style="color: var(--text-primary); margin-bottom: 15px;">Security Implementations</h2>
-            <ul style="color: var(--text-muted); line-height: 1.8; margin-left: 20px; font-family: var(--font-mono); font-size: 0.9rem;">
-                <li><strong style="color: var(--accent-green);">SQLi Defense:</strong> Parameterized queries via pg driver.</li>
-                <li><strong style="color: var(--accent-green);">CSRF Mitigation:</strong> Custom Double-Submit Cryptographic Cookies.</li>
-                <li><strong style="color: var(--accent-green);">SSRF Shielding:</strong> Internal IP (RFC 1918) range blocking.</li>
-                <li><strong style="color: var(--accent-green);">XXE & XSS:</strong> Context-aware sanitization and DTD disabling.</li>
-            </ul>
-        </section>
-
-        <a href="../../../index.html" style="color: var(--text-muted); text-decoration: none; font-family: var(--font-mono);">[ Return to Main Menu ]</a>
+    <div class="about-container fade-in-up">
+        <h1 class="glitch-text">The CypherVault Initiative</h1>
+        <p class="mission-text">
+            CypherVault was engineered to be the ultimate testing ground for modern web vulnerabilities. 
+            It is a dual-state architecture: half impenetrable fortress, half intentional sandbox. 
+            By studying the fractures in the vulnerable routing protocols, operators can master the 
+            art of digital defense.
+        </p>
+        
+        <h3 style="color: #fff; margin-bottom: 15px;">CORE ARCHITECTURE</h3>
+        <div class="tech-stack">
+            <span class="tech-badge">Node.js Mainframe</span>
+            <span class="tech-badge">Express API Core</span>
+            <span class="tech-badge">Supabase Vault (PostgreSQL)</span>
+            <span class="tech-badge">Vanilla JS Client</span>
+            <span class="tech-badge">Cryptographic CSRF Armor</span>
+        </div>
     </div>
 </body>
 </html>

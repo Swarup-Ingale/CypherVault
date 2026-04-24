@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CypherVault | Architect</title>
+    <link rel="stylesheet" href="../../../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <script>
+        // Check if the user bypassed the security via the console injection
+        if (sessionStorage.getItem('dev_clearance') !== 'swale_alpha_override') {
+            document.write('<body style="background: #05080c; color: #ff4444; font-family: monospace; display: flex; justify-content: center; align-items: center; height: 100vh;"><h1>[!] UNAUTHORIZED ACCESS ATTEMPT DETECTED. IP LOGGED.</h1></body>');
+            setTimeout(() => { window.location.href = '../../../index.html'; }, 2000);
+        }
+    </script>
+
+    <style>
+        .dev-card {
+            max-width: 600px;
+            margin: 80px auto;
+            background: #0a0f14;
+            border: 1px solid var(--accent-green);
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 0 30px rgba(0, 255, 170, 0.15);
+        }
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 3px solid var(--accent-green);
+            margin: 0 auto 20px;
+            background: url('https://github.com/Swarup-Ingale.png') center/cover; /* Replace with your image URL or local path */
+            background-color: #1a232c; /* Fallback color */
+        }
+        .dev-name {
+            font-size: 2.5rem;
+            color: #fff;
+            margin: 0 0 5px 0;
+            letter-spacing: 2px;
+        }
+        .dev-title {
+            color: var(--accent-green);
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .social-btn {
+            padding: 10px 25px;
+            border: 1px solid #444;
+            color: #a9b7c6;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .social-btn:hover {
+            border-color: var(--accent-green);
+            color: var(--accent-green);
+            box-shadow: 0 0 10px rgba(0,255,170,0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="dev-card fade-in-up">
+        <div class="profile-img"></div>
+        <h1 class="dev-name">SWARUP INGALE</h1>
+        <div class="dev-title">[ ALIAS: SWALE | SYSTEM ARCHITECT ]</div>
+        
+        <p style="color: #a9b7c6; line-height: 1.6; margin-bottom: 20px;">
+            Cybersecurity enthusiast, full-stack developer, and the creator of CypherVault. 
+            If you are reading this, you successfully analyzed the source code and bypassed the client-side authorization parameters. Welcome to the core.
+        </p>
+
+        <div class="social-links">
+            <a href="https://github.com/Swarup-Ingale" target="_blank" class="social-btn">GitHub</a>
+            <a href="https://www.linkedin.com/in/swarup-ingale-45864b295/" target="_blank" class="social-btn">LinkedIn</a>
+            </div>
+    </div>
+</body>
+</html>
