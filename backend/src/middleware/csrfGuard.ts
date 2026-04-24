@@ -46,11 +46,25 @@ export class SecurityGuards {
                 return;
             }
 
+            // --- THE FIX STARTS HERE ---
+            // Convert inputs to strings safely to prevent undefined buffer crashes
+            const safeCookieToken = String(cookieToken);
+            const safeHeaderToken = String(headerToken);
+
+            const cookieBuffer = Buffer.from(safeCookieToken);
+            const headerBuffer = Buffer.from(safeHeaderToken);
+
+            // PRE-CHECK: If the lengths do not match exactly, reject immediately.
+            // This prevents crypto.timingSafeEqual from crashing the server with a 500 error.
+            if (cookieBuffer.length !== headerBuffer.length) {
+                console.warn(`[Security Alert] CSRF token length mismatch detected from IP: ${req.ip}`);
+                res.status(403).json({ error: 'Access Denied: CSRF token length mismatch.' });
+                return;
+            }
+
             // Cryptographic timing-safe comparison to prevent timing attacks
-            const isMatch = crypto.timingSafeEqual(
-                Buffer.from(cookieToken), 
-                Buffer.from(headerToken as string)
-            );
+            const isMatch = crypto.timingSafeEqual(cookieBuffer, headerBuffer);
+            // --- THE FIX ENDS HERE ---
 
             if (!isMatch) {
                 console.error(`[Security Alert] CSRF token mismatch detected from IP: ${req.ip}`);
