@@ -4,6 +4,8 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import hpp from 'hpp';
 import dotenv from 'dotenv';
+import fs from 'fs';
+import path from 'path';
 
 import { SecurityGuards } from './middleware/csrfGuard';
 import { SSRFGuard } from './middleware/ssrfValidator';
@@ -149,6 +151,52 @@ app.post('/api/secure/oracle', async (req, res) => {
     } catch (error) {
         console.error("AI Error:", error);
         res.status(500).json({ reply: "[!] Connection to AI Core severed." });
+    }
+});
+
+// C. ADVANCED VULNERABILITY: LOCAL FILE INCLUSION (LFI)
+// 🔴 THE EXPLOIT (Vulnerable Route)
+app.get('/api/vulnerable/system/logs', (req: Request, res: Response) => {
+    try {
+        const targetFile = req.query.file as string;
+        if (!targetFile) return res.status(400).json({ error: "No file specified." });
+
+        // THE FLAW: Joining the requested filename directly to the current directory
+        const filePath = path.join(__dirname, targetFile);
+        
+        const data = fs.readFileSync(filePath, 'utf8');
+        res.status(200).send(data);
+    } catch (err) {
+        // Safe catch: Prevents the server from crashing if the file doesn't exist
+        res.status(404).json({ error: "System Fault: File not found or access denied." });
+    }
+});
+
+// 🟢 THE VAULT (Secure Route)
+app.get('/api/secure/system/logs', (req: Request, res: Response) => {
+    try {
+        const targetFile = req.query.file as string;
+        if (!targetFile) return res.status(400).json({ error: "No file specified." });
+
+        // 1. Define the absolute boundary (They can ONLY read from the /logs folder)
+        const secureBaseDir = path.join(__dirname, 'logs'); 
+        
+        // 2. Normalize the path (Resolves any sneaky "../" attempts into a real absolute path)
+        const requestedPath = path.normalize(path.join(secureBaseDir, targetFile));
+
+        // 3. THE SECURITY GUARD: Check if the final path STILL starts with our safe directory
+        if (!requestedPath.startsWith(secureBaseDir)) {
+            console.warn(`[SECURITY ALERT] LFI Path Traversal blocked. Target: ${requestedPath}`);
+            return res.status(403).json({ 
+                error: "Access Denied: Path Traversal Attempt Blocked.",
+                mitigation: "Strict directory boundary enforcement active."
+            });
+        }
+
+        const data = fs.readFileSync(requestedPath, 'utf8');
+        res.status(200).send(data);
+    } catch (err) {
+        res.status(404).json({ error: "Log file not found in authorized directory." });
     }
 });
 
