@@ -23,10 +23,12 @@ export class SecurityGuards {
             });
 
             // The Transport: Readable by the frontend so it can attach it to headers
+            // Inside your CSRF middleware where the cookie is generated:
             res.cookie('XSRF-TOKEN', csrfToken, {
-                secure: isProd,
-                sameSite: sameSitePolicy as any,
-                maxAge: 3600000
+                httpOnly: false, // Must be false so the frontend JS can read it
+                secure: true,    // CRITICAL: Required for cross-origin cookies over HTTPS
+                sameSite: 'none', // CRITICAL: Tells the browser it's okay to send this from Cloudflare to Render
+                maxAge: 24 * 60 * 60 * 1000 // 24 hours
             });
         }
 
