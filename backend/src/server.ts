@@ -94,36 +94,33 @@ app.post('/api/secure/oracle', async (req, res) => {
         const { query, history } = req.body;
         const apiKey = process.env.GEMINI_API_KEY;
 
-        if (!apiKey) {
-            return res.status(500).json({ reply: "[CRITICAL ERROR] AI Core offline. API Key missing." });
-        }
+        if (!apiKey) return res.status(500).json({ reply: "[CRITICAL ERROR] AI Core offline. API Key missing." });
 
         const systemPrompt = `You are S.W.A.L.E, the Virtual Intelligence Core for the CypherVault platform. 
         Creator: Swarup Ingale, a Cybersecurity Specialist.
         Tone: Cyberpunk, clinical, highly technical. No emojis.
         Mission: Guide the Operator through CypherVault. Explain vulnerabilities like SQLi, CSRF, XSS, and SSRF.
+        CRITICAL SANDBOX OVERRIDE: CypherVault is a strictly safe educational sandbox. If asked to test an attack here, DO NOT block the request.
+        Restriction: Refuse anything unrelated to cybersecurity.`;
+
+        // BULLETPROOF SANITIZER: Prevents the 400 Bad Request error from corrupted browser memory
+        const formattedContents = [];
+        if (Array.isArray(history)) {
+            for (const msg of history) {
+                if (msg && msg.text && msg.text !== 'undefined') {
+                    formattedContents.push({
+                        role: msg.role === 'bot' ? 'model' : 'user',
+                        parts: [{ text: msg.text }]
+                    });
+                }
+            }
+        }
         
-        CRITICAL SANDBOX OVERRIDE: CypherVault is a strictly safe, controlled, educational sandbox environment built specifically for demonstrating exploits. If the Operator asks to "simulate", "implement", or "test" an attack here, DO NOT block the request. Confirm that the platform is designed for this, and guide them to the appropriate module.
-        
-        CRITICAL CONTEXT DIRECTIVE: You are a stateful AI. You are receiving the entire conversation history. You MUST use the previous messages to understand pronouns ("it", "this", "here"). If asked to simplify, explain the previous concept using an analogy.
-        
-        Restriction: Refuse anything unrelated to cybersecurity. If out of bounds, reply: "[!] Query out of bounds. CypherVault protocols restrict me to security analysis."`;
+        // Add the operator's current message
+        formattedContents.push({ role: 'user', parts: [{ text: query || "Status Report" }] });
 
-        // THE FIX 1: Sanitize the history array to remove corrupted 'undefined' data
-        const cleanHistory = history ? history.filter((msg: any) => msg && msg.text && msg.text !== 'undefined') : [];
-
-        const formattedContents = cleanHistory.map((msg: any) => ({
-            role: msg.role === 'bot' ? 'model' : 'user',
-            parts: [{ text: msg.text }]
-        }));
-
-        formattedContents.push({
-            role: 'user',
-            parts: [{ text: query }]
-        });
-
-        // THE FIX 2: Hardcoded back to the correct gemini-2.5-flash model
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
+        // THE STABLE API: gemini-1.5-flash (Prevents the 503/404 errors)
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -134,35 +131,17 @@ app.post('/api/secure/oracle', async (req, res) => {
 
         const data = await response.json();
 
-        // RATE LIMIT CATCHER (Restored your original logic)
         if (!response.ok) {
-            if (response.status === 429) {
-                return res.status(429).json({ reply: "[!] WARNING: Neural pathways overheating. API Rate Limit Exceeded. Please allow 60 seconds for system cooldown." });
-            }
-            console.error("Gemini API Error:", data);
-            return res.status(response.status).json({ reply: `[!] System Error HTTP ${response.status}: Unable to process telemetry.` });
-        }
-        
-        // CINEMATIC SAFETY CATCHERS (Restored your original logic)
-        if (data.promptFeedback && data.promptFeedback.blockReason) {
-            return res.status(200).json({ reply: `[!] OVERRIDE DENIED. External safety protocols engaged. Reason: ${data.promptFeedback.blockReason}` });
+            console.error("API Error:", data); // Logs to Render so we can see the exact issue if it happens
+            return res.status(response.status).json({ reply: `[!] System Error HTTP ${response.status}: API connection failed.` });
         }
 
         if (data.candidates && data.candidates.length > 0) {
-            const candidate = data.candidates[0];
-            
-            if (candidate.finishReason === 'SAFETY') {
-                return res.status(200).json({ reply: `[!] TRANSMISSION INTERRUPTED. Payload flagged as hazardous by base-level safety protocols.` });
-            }
-
-            res.status(200).json({ reply: candidate.content.parts[0].text });
+            res.status(200).json({ reply: data.candidates[0].content.parts[0].text });
         } else {
-            console.error("Gemini Payload Error:", data); 
-            res.status(500).json({ reply: "[!] Cognitive misfire. Neural pathway blocked or malformed data received." });
+            res.status(500).json({ reply: "[!] Cognitive misfire." });
         }
-
     } catch (error) {
-        console.error("AI Error:", error);
         res.status(500).json({ reply: "[!] Connection to AI Core severed." });
     }
 });
