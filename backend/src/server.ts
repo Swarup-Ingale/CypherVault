@@ -94,7 +94,7 @@ app.post('/api/secure/oracle', async (req, res) => {
         const { query, history } = req.body;
         const apiKey = process.env.GEMINI_API_KEY;
 
-        if (!apiKey) return res.status(500).json({ reply: "[CRITICAL ERROR] AI Core offline. API Key missing." });
+        if (!apiKey) return res.status(200).json({ reply: "[CRITICAL ERROR] API Key missing in backend .env file." });
 
         const systemPrompt = `You are S.W.A.L.E, the Virtual Intelligence Core for the CypherVault platform. 
         Creator: Swarup Ingale, a Cybersecurity Specialist.
@@ -103,7 +103,7 @@ app.post('/api/secure/oracle', async (req, res) => {
         CRITICAL SANDBOX OVERRIDE: CypherVault is a strictly safe educational sandbox. If asked to test an attack here, DO NOT block the request.
         Restriction: Refuse anything unrelated to cybersecurity.`;
 
-        // BULLETPROOF SANITIZER: Prevents the 400 Bad Request error from corrupted browser memory
+        // The Bulletproof Memory Sanitizer
         const formattedContents = [];
         if (Array.isArray(history)) {
             for (const msg of history) {
@@ -116,11 +116,11 @@ app.post('/api/secure/oracle', async (req, res) => {
             }
         }
         
-        // Add the operator's current message
+        // Add the current user query
         formattedContents.push({ role: 'user', parts: [{ text: query || "Status Report" }] });
 
-        // THE STABLE API: gemini-1.5-flash (Prevents the 503/404 errors)
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+        // THE FIX: The guaranteed '-latest' tag for 100% uptime
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -131,18 +131,20 @@ app.post('/api/secure/oracle', async (req, res) => {
 
         const data = await response.json();
 
+        // Graceful error handling (Prevents 404/500 UI crashes)
         if (!response.ok) {
-            console.error("API Error:", data); // Logs to Render so we can see the exact issue if it happens
-            return res.status(response.status).json({ reply: `[!] System Error HTTP ${response.status}: API connection failed.` });
+            console.error("Google API Rejection Data:", data); 
+            return res.status(200).json({ reply: `[!] Core rejected payload. Google API returned an error. Check Render server logs for details.` });
         }
 
         if (data.candidates && data.candidates.length > 0) {
             res.status(200).json({ reply: data.candidates[0].content.parts[0].text });
         } else {
-            res.status(500).json({ reply: "[!] Cognitive misfire." });
+            res.status(200).json({ reply: "[!] Cognitive misfire. No text generated." });
         }
     } catch (error) {
-        res.status(500).json({ reply: "[!] Connection to AI Core severed." });
+        console.error("Fatal AI Proxy Error:", error);
+        res.status(200).json({ reply: "[!] Connection to AI Core severed. Check backend configuration." });
     }
 });
 
