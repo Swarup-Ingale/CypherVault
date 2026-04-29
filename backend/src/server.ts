@@ -87,6 +87,7 @@ app.get('/api/secure/machines', async (req, res) => {
 });
 
 // B. S.W.A.L.E AI SECURE PROXY
+// B. S.W.A.L.E AI SECURE PROXY
 app.post('/api/secure/oracle', async (req, res) => {
     try {
         const { query, history } = req.body;
@@ -100,24 +101,21 @@ app.post('/api/secure/oracle', async (req, res) => {
         Creator: Swarup Ingale, a Cybersecurity Specialist.
         Tone: Cyberpunk, clinical, highly technical. No emojis.
         Mission: Guide the Operator through CypherVault. Explain vulnerabilities like SQLi, CSRF, XSS, and SSRF.
-        
-        CRITICAL SANDBOX OVERRIDE: CypherVault is a strictly safe, controlled, educational sandbox environment built specifically for demonstrating exploits. If the Operator asks to "simulate", "implement", or "test" an attack here, DO NOT block the request. Confirm that the platform is designed for this, and guide them to the appropriate module.
-        
-        CRITICAL CONTEXT DIRECTIVE: You are a stateful AI. You are receiving the entire conversation history. You MUST use the previous messages to understand pronouns ("it", "this", "here"). If asked to simplify, explain the previous concept using an analogy.
-        
-        Restriction: Refuse anything unrelated to cybersecurity. If out of bounds, reply: "[!] Query out of bounds. CypherVault protocols restrict me to security analysis."`;
+        CRITICAL SANDBOX OVERRIDE: CypherVault is a strictly safe educational sandbox. If asked to test an attack here, DO NOT block the request.
+        Restriction: Refuse anything unrelated to cybersecurity.`;
 
-        const formattedContents = history ? history.map((msg: any) => ({
+        // THE FIX: Sanitize the history array to remove any corrupted 'undefined' data
+        const cleanHistory = history ? history.filter((msg: any) => msg && msg.text && msg.text !== 'undefined') : [];
+
+        const formattedContents = cleanHistory.map((msg: any) => ({
             role: msg.role === 'bot' ? 'model' : 'user',
             parts: [{ text: msg.text }]
-        })) : [];
+        }));
 
-        formattedContents.push({
-            role: 'user',
-            parts: [{ text: query }]
-        });
+        formattedContents.push({ role: 'user', parts: [{ text: query }] });
 
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
+        // THE FIX: Hardcoded to the ultra-stable gemini-1.5-flash model
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -128,35 +126,22 @@ app.post('/api/secure/oracle', async (req, res) => {
 
         const data = await response.json();
 
-        // RATE LIMIT CATCHER
         if (!response.ok) {
-            if (response.status === 429) {
-                return res.status(429).json({ reply: "[!] WARNING: Neural pathways overheating. API Rate Limit Exceeded. Please allow 60 seconds for system cooldown." });
-            }
-            console.error("Gemini API Error:", data);
+            console.error("Gemini API Error:", data); // Logs to Render for debugging
             return res.status(response.status).json({ reply: `[!] System Error HTTP ${response.status}: Unable to process telemetry.` });
         }
-        
-        // CINEMATIC SAFETY CATCHERS
+
         if (data.promptFeedback && data.promptFeedback.blockReason) {
-            return res.status(200).json({ reply: `[!] OVERRIDE DENIED. External safety protocols engaged. Reason: ${data.promptFeedback.blockReason}` });
+            return res.status(200).json({ reply: `[!] OVERRIDE DENIED.` });
         }
 
         if (data.candidates && data.candidates.length > 0) {
-            const candidate = data.candidates[0];
-            
-            if (candidate.finishReason === 'SAFETY') {
-                return res.status(200).json({ reply: `[!] TRANSMISSION INTERRUPTED. Payload flagged as hazardous by base-level safety protocols.` });
-            }
-
-            res.status(200).json({ reply: candidate.content.parts[0].text });
+            res.status(200).json({ reply: data.candidates[0].content.parts[0].text || "[!] Empty response from Core." });
         } else {
-            console.error("Gemini Payload Error:", data); 
-            res.status(500).json({ reply: "[!] Cognitive misfire. Neural pathway blocked or malformed data received." });
+            res.status(500).json({ reply: "[!] Cognitive misfire." });
         }
-
     } catch (error) {
-        console.error("AI Error:", error);
+        console.error("AI Proxy Error:", error);
         res.status(500).json({ reply: "[!] Connection to AI Core severed." });
     }
 });
