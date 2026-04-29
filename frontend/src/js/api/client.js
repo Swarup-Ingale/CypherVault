@@ -1,6 +1,6 @@
 // frontend/src/js/api/client.js
 
-const API_BASE = '/api';
+const API_BASE = 'https://cyphervault-api.onrender.com/api';
 
 export const ApiClient = {
     // Helper to extract the Double-Submit Cookie

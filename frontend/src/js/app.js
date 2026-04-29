@@ -2,7 +2,7 @@
 // CLOUD API ROUTING
 // ==========================================
 // When you deploy, comment out localhost and uncomment the Render URL
-const API_BASE = '/api'; // Replace with your actual Render URL later
+const API_BASE = 'https://cyphervault-api.onrender.com/api'; // Replace with your actual Render URL later
 
 // Helper Function: Write to the cinematic terminals
 function logToTerminal(terminalId, text, type = 'normal') {
@@ -169,6 +169,65 @@ document.addEventListener("DOMContentLoaded", () => {
         executeVulnBtn.addEventListener('click', () => handleExtraction(false));
     }
 
+    // ==========================================
+    // MODULE: RCE NETWORK DIAGNOSTICS (PING)
+    // ==========================================
+    const executePingBtn = document.getElementById('execute-ping'); // We need to add an ID to the button in HTML
+    if (document.getElementById('ping-target')) {
+        
+        // This makes the executePing function available globally to the HTML button
+        window.executePing = async function() {
+            const targetInput = document.getElementById('ping-target').value;
+            const isSecure = document.getElementById('secure-ping-toggle').checked;
+            const outputBox = document.getElementById('ping-output');
+
+            if (!targetInput) {
+                outputBox.innerText = "[!] Error: Target IP required.";
+                outputBox.style.color = "#ff4444";
+                return;
+            }
+
+            // Set UI to loading state
+            outputBox.style.color = "#a9b7c6";
+            outputBox.innerText = `Establishing connection to ${targetInput}...\nExecuting ping sequence...`;
+
+            const endpoint = isSecure ? '/secure/system/ping' : '/vulnerable/system/ping';
+
+            try {
+                const response = await fetch(`${API_BASE}${endpoint}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-csrf-token': getCSRFToken()
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify({ ip: targetInput })
+                });
+
+                const data = await response.json();
+
+                // Fake delay to make the terminal feel cinematic
+                setTimeout(() => {
+                    outputBox.innerText = data.output;
+                    
+                    if (response.status === 403) {
+                        outputBox.style.color = "#ff4444"; // Red for blocked attempt
+                    } else if (data.output && data.output.includes("bytes from")) {
+                        outputBox.style.color = "var(--accent-green)"; // Green for success
+                    } else {
+                        outputBox.style.color = "#ffbd2e"; // Yellow for errors/strange output
+                    }
+                }, 800);
+
+            } catch (err) {
+                setTimeout(() => {
+                    outputBox.innerText = `[CRITICAL] Network failure: Cannot reach core server.\n${err.message}`;
+                    outputBox.style.color = "#ff4444";
+                }, 800);
+            }
+        };
+    }
+    
     // ==========================================
     // PAGE 3: TARGET ROSTER (LIST) - NETWORK SWEEP BYPASS
     // ==========================================
