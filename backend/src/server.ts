@@ -119,8 +119,8 @@ app.post('/api/secure/oracle', async (req, res) => {
         // Add the current user query
         formattedContents.push({ role: 'user', parts: [{ text: query || "Status Report" }] });
 
-        // THE FIX: The proven, exact working model name.
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+        // THE FIX: The officially supported Gemini 2.5 Flash model
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -131,9 +131,9 @@ app.post('/api/secure/oracle', async (req, res) => {
 
         const data = await response.json();
 
+        // Graceful error handling (Prevents 404/500 UI crashes)
         if (!response.ok) {
             console.error("Google API Rejection Data:", data); 
-            // This will now print the exact Google error directly to your screen if it fails again
             return res.status(200).json({ reply: `[!] Google API Error: ${data.error?.message || 'Unknown API failure'}` });
         }
 
