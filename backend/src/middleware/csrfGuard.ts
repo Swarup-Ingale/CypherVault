@@ -29,7 +29,7 @@ export class SecurityGuards {
                 secure: true,    // CRITICAL: Required for cross-origin cookies over HTTPS
                 sameSite: 'none', // CRITICAL: Tells the browser it's okay to send this from Cloudflare to Render
                 maxAge: 24 * 60 * 60 * 1000 // 24 hours
-            });
+            }); 
         }
 
         // 2. Validate the token on all state-changing requests

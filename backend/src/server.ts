@@ -16,6 +16,13 @@ import { db } from './config/database';
 dotenv.config();
 
 const app: Application = express();
+
+// ==========================================
+// [CRITICAL OVERRIDE] RENDER PROXY TRUST
+// ==========================================
+// Express is behind Render's load balancer. 
+// Without this, Express refuses to set 'Secure' cookies!
+app.set('trust proxy', 1);
 const PORT = process.env.PORT || 5000;
 const isProduction = process.env.NODE_ENV === 'production';
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
